@@ -1,6 +1,8 @@
 ---
 name: skill-manager
 description: Use when adding, editing, migrating, unifying or verifying agent skills across WorkBuddy, Qoder, OpenCode, DSH or other tools managed by skillsctl; also use when a skill is missing from one tool, or the same skill drifted between tools.
+author: rockszq
+source: https://github.com/rockszq/skillsctl
 ---
 
 # Skill manager
@@ -19,6 +21,9 @@ Maintain one source of truth for agent skills. The repository is `~/.skills-src`
 ## Commands
 
 ```bash
+python skillctl.py init                   # create repo skeleton
+python skillctl.py doctor                 # environment + link diagnosis
+python skillctl.py adopt --tool T --path P  # connect a new agent
 python skillctl.py status                 # flavors per skill
 python skillctl.py verify                 # six-layer gate; non-zero means broken
 python skillctl.py refresh                # recompute hashes after any edit

@@ -1,13 +1,13 @@
 {
   "excluded": [],
-  "generated_at": "2026-11-16 11:32:01",
+  "generated_at": "2026-11-16 11:51:34",
   "schema": 1,
   "skills": {
     "skill-manager": {
       "flavors": {
         "skill-manager": {
           "files": 1,
-          "hash": "f4eb2b631effdb868acf6e6aebfde97c6f697ee9bd102bd4912deb39eb0182aa"
+          "hash": "d1aeca3737e892df8face4e32a76bcce75bde8b949852f1454d3b1458dfef962"
         }
       },
       "targets": {

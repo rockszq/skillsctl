@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Copyright (c) 2026 rockszq
+# SPDX-License-Identifier: MIT
 """skillctl — 跨工具 SKILL 单源管理（flavor 模型 + Windows 目录联接）。
 
 单源仓保存唯一的 skill 内容；各工具目录里的 skill 是指向仓内 flavor 的 junction。
@@ -1367,6 +1369,104 @@ def cmd_selftest(args):
 
 # ---------------------------------------------------------------- main
 
+def cmd_init(args):
+    """Create the repo skeleton: skills/, manifest.json and tools.json."""
+    os.makedirs(CTX["skills"], exist_ok=True)
+    if not os.path.isfile(CTX["manifest"]):
+        save_manifest({"schema": 1, "generated_at": "", "skills": {}, "excluded": []})
+        log("created %s" % CTX["manifest"])
+    else:
+        log("kept existing %s" % CTX["manifest"])
+    cfg = os.path.join(CTX["repo"], "tools.json")
+    if not os.path.isfile(cfg):
+        with open(cfg, "w", encoding="utf-8") as fh:
+            json.dump(DEFAULT_TOOLS, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+        log("created %s" % cfg)
+    else:
+        log("kept existing %s" % cfg)
+    log("next: python skillctl.py add <name> --empty  (or import)")
+    return 0
+
+
+def cmd_doctor(args):
+    """Diagnose the repo, every configured tool directory and the link state."""
+    errors = warnings = oks = 0
+    if not os.path.isdir(CTX["repo"]):
+        log("[ERROR] repo directory is missing: %s" % CTX["repo"])
+        return 1
+    try:
+        load_manifest()
+        oks += 1
+        log("[OK] manifest parses")
+    except Exception as exc:
+        log("[ERROR] manifest: %s" % exc)
+        return 1
+    for tool, root in CTX["tools"].items():
+        if not os.path.isdir(root):
+            warnings += 1
+            log("[WARN] %s: skills directory missing (%s)" % (tool, root))
+        elif not os.access(root, os.W_OK):
+            warnings += 1
+            log("[WARN] %s: skills directory is not writable" % tool)
+        else:
+            oks += 1
+            log("[OK] %s: %s" % (tool, root))
+    rc = cmd_verify(argparse.Namespace())
+    if rc:
+        errors += 1
+    else:
+        oks += 1
+    wb_root = CTX["tools"].get("workbuddy")
+    if wb_root:
+        cache = os.path.join(os.path.dirname(wb_root), ".skill-list-cache.json")
+        if os.path.isfile(cache):
+            newest = 0
+            for dp, _dn, fn in os.walk(CTX["skills"]):
+                for f in fn:
+                    if f == "SKILL.md":
+                        newest = max(newest, os.path.getmtime(os.path.join(dp, f)))
+            if os.path.getmtime(cache) < newest:
+                warnings += 1
+                log("[WARN] WorkBuddy skill cache is older than SKILL.md changes; restart WorkBuddy")
+            else:
+                oks += 1
+                log("[OK] WorkBuddy skill cache is current")
+    log("doctor: %d ok, %d warn, %d error" % (oks, warnings, errors))
+    return 1 if errors else 0
+
+
+def cmd_adopt(args):
+    """Register a new tool (agent) in tools.json, optionally linking right away."""
+    tool = (args.tool or "").strip()
+    if not re.match(r"^[a-z0-9][a-z0-9_-]*$", tool):
+        log("[ERROR] tool name must be lowercase letters, digits, dash or underscore")
+        return 1
+    root = os.path.expanduser((args.path or "").strip())
+    if not os.path.isabs(root):
+        log("[ERROR] --path must be absolute or start with ~")
+        return 1
+    if not os.path.isdir(root):
+        if not args.create:
+            log("[ERROR] path does not exist: %s (add --create)" % root)
+            return 1
+        os.makedirs(root, exist_ok=True)
+    tools = load_tools(CTX["repo"])
+    tools[tool] = root
+    path = os.path.join(CTX["repo"], "tools.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(tools, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    CTX["tools"][tool] = root
+    global TOOL_ORDER
+    TOOL_ORDER = tuple(CTX["tools"].keys())
+    log("adopted %s -> %s" % (tool, root))
+    if args.link:
+        return cmd_link(argparse.Namespace(only=None, dry_run=False, ts=None))
+    log("next: python skillctl.py link --only <skill>")
+    return 0
+
+
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -1427,6 +1527,17 @@ def main():
     sub.add_parser("selftest").set_defaults(fn=cmd_selftest)
 
     sub.add_parser("normalize-eol").set_defaults(fn=cmd_normalize_eol)
+
+    sub.add_parser("init").set_defaults(fn=cmd_init)
+
+    sub.add_parser("doctor").set_defaults(fn=cmd_doctor)
+
+    p_adopt = sub.add_parser("adopt")
+    p_adopt.add_argument("--tool", required=True)
+    p_adopt.add_argument("--path", required=True)
+    p_adopt.add_argument("--create", action="store_true")
+    p_adopt.add_argument("--link", action="store_true")
+    p_adopt.set_defaults(fn=cmd_adopt)
 
     p_drift = sub.add_parser("drift")
     p_drift.add_argument("--min-ratio", type=float, default=0.85)

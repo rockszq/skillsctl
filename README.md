@@ -1,5 +1,7 @@
 # skillsctl
 
+> Author: rockszq · Source: https://github.com/rockszq/skillsctl · License: MIT
+
 One source of truth for the skills of every AI coding agent on your machine.
 
 WorkBuddy, Qoder, OpenCode, DSH and similar tools each scan their own skills
@@ -58,6 +60,9 @@ location defaults to `~/.skills-src` and can be overridden with
 
 | Command | What it does |
 |---|---|
+| `init` | create `skills/`, `manifest.json` and `tools.json` if missing |
+| `doctor` | environment diagnosis: directories, links, hashes, stale cache |
+| `adopt --tool T --path P` | connect a new agent and write `tools.json` |
 | `status` | flavor distribution per skill |
 | `verify` | links, hashes, frontmatter, referenced files, line endings |
 | `refresh` | recompute flavor hashes after editing content |
@@ -122,6 +127,16 @@ Details and the exact scanner behavior are in
 - Marketplace-managed directories (e.g. `~/.workbuddy/skills/superpowers/`) must
   never be linked: the marketplace deletes and re-extracts them on update.
 
+## Further reading
+
+- [Workflow](docs/workflow.md): install, inventory, migrate, maintain, add an
+  agent, roll back.
+- [Agent definition](agents/skill-manager.md): the role, procedure and
+  boundaries an agent follows when it manages skills.
+- [Design](docs/design.md), [compatibility](docs/compatibility.md),
+  [migration](docs/migration.md).
+
 ## License
 
-MIT
+MIT. See `LICENSE` and `NOTICE`; keep both when redistributing.
+
