@@ -88,11 +88,11 @@ def log(msg=""):
 
 
 def norm(p):
-    return os.path.normcase(os.path.abspath(p))
+    return os.path.normcase(os.path.realpath(p))
 
 
 def same_path(a, b):
-    return os.path.normcase(os.path.realpath(a)) == os.path.normcase(os.path.realpath(b))
+    return norm(a) == norm(b)
 
 
 def is_linklike(path):
