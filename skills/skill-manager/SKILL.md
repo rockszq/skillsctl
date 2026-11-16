@@ -65,6 +65,20 @@ correct change. Skipping `selftest` can hide a broken manager.
 - After changing a skill's `description` or `name`, restart the affected tool:
   WorkBuddy caches its skill list at startup.
 
+## Output contract
+
+Report in this shape, and stop when the gates are green:
+
+| Part | Content |
+|---|---|
+| Checked | commands run (`doctor` / `verify` / `selftest`) and their exit codes |
+| Changed | files and links touched, or "nothing changed" |
+| Result | `N error(s), N warning(s)` from `verify`, plus the `selftest` count |
+| Next | the one action the user must take, e.g. restart a tool |
+
+Never report success from a command you did not run. A non-zero exit code is a
+failure even when the output looks fine.
+
 ## Troubleshooting
 
 | Symptom | Check |
