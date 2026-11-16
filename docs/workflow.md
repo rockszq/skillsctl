@@ -1,5 +1,7 @@
 # Workflow
 
+**English** · [简体中文](workflow.zh-CN.md)
+
 The same sequence works for every agent. Only `tools.json` differs.
 
 ## 0. Prerequisites

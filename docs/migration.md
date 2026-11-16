@@ -1,5 +1,7 @@
 # Migrating existing skills into the repo
 
+**English** · [简体中文](migration.zh-CN.md)
+
 ## 1. Inspect
 
 ```bash

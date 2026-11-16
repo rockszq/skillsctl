@@ -1,6 +1,8 @@
 # skillsctl
 
-> Author: rockszq · Source: https://github.com/rockszq/skillsctl · License: MIT
+**English** · [简体中文](README.zh-CN.md)
+
+> Author: rockszq · Source: https://github.com/rockszq/skillsctl · License: Apache-2.0
 
 One source of truth for the skills of every AI coding agent on your machine.
 
@@ -135,8 +137,14 @@ Details and the exact scanner behavior are in
   boundaries an agent follows when it manages skills.
 - [Design](docs/design.md), [compatibility](docs/compatibility.md),
   [migration](docs/migration.md).
+- Chinese versions: [README](README.zh-CN.md) ·
+  [workflow](docs/workflow.zh-CN.md) · [design](docs/design.zh-CN.md) ·
+  [compatibility](docs/compatibility.zh-CN.md) ·
+  [migration](docs/migration.zh-CN.md).
 
 ## License
 
-MIT. See `LICENSE` and `NOTICE`; keep both when redistributing.
+Apache License 2.0. See `LICENSE` for the full text and `NOTICE` for the
+attribution. When redistributing, keep both files and state the changes you
+made — Apache-2.0 section 4 requires it.
 

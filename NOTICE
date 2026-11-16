@@ -1,8 +1,15 @@
 skillsctl
-Copyright (c) 2026 rockszq
+Copyright 2026 rockszq
 https://github.com/rockszq/skillsctl
 
-This product is distributed under the MIT License. See LICENSE.
+This product is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full text.
 
-If you redistribute this software or a modified version of it, keep this NOTICE
-file and the copyright notice in the source files.
+Redistribution requirements (Apache-2.0, section 4):
+
+1. Keep this NOTICE file and the copyright notice in the source files.
+2. State the changes if you modify any file: add a prominent notice in the
+   changed file saying that you changed it.
+3. Keep the LICENSE file with any copy or derivative work.
+
+SPDX-License-Identifier: Apache-2.0

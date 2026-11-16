@@ -1,5 +1,7 @@
 # Design
 
+**English** · [简体中文](design.zh-CN.md)
+
 ## The problem
 
 Every agent scans its own directory for skills. Without a shared source, the same

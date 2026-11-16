@@ -1,5 +1,7 @@
 # Tool compatibility
 
+**English** · [简体中文](compatibility.zh-CN.md)
+
 All four tools are Node/Electron applications and scan skills with
 `readdir(withFileTypes)`. On Windows a junction is reported as a link, not a
 directory, so the scanner must fall back to `stat` for the entry to register.
