@@ -1,0 +1,6 @@
+{
+  "workbuddy": "~/.workbuddy/skills",
+  "qoder": "~/.qoder/skills",
+  "opencode": "~/.config/opencode/skills",
+  "dsh": "~/.dsh/skills"
+}

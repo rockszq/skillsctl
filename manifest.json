@@ -1,0 +1,21 @@
+{
+  "excluded": [],
+  "generated_at": "2026-11-16 11:32:01",
+  "schema": 1,
+  "skills": {
+    "skill-manager": {
+      "flavors": {
+        "skill-manager": {
+          "files": 1,
+          "hash": "f4eb2b631effdb868acf6e6aebfde97c6f697ee9bd102bd4912deb39eb0182aa"
+        }
+      },
+      "targets": {
+        "dsh": "skill-manager",
+        "opencode": "skill-manager",
+        "qoder": "skill-manager",
+        "workbuddy": "skill-manager"
+      }
+    }
+  }
+}
