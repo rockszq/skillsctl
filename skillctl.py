@@ -92,7 +92,7 @@ def norm(p):
 
 
 def same_path(a, b):
-    return norm(a) == norm(b)
+    return os.path.normcase(os.path.realpath(a)) == os.path.normcase(os.path.realpath(b))
 
 
 def is_linklike(path):
@@ -1305,10 +1305,10 @@ def cmd_selftest(args):
         chk("verify silent for non-kebab without dsh target", "dsh-name-grammar" not in out)
         # 真给 DSH 部署时（绕过 link 政策手工建链），verify 必须兜住
         mu = load_manifest()
-        mu["skills"]["under_score"]["targets"]["dsh"] = "under_score"
+        mu["skills"]["under_score"]["targets"][TOOL_ORDER[-1]] = "under_score"
         save_manifest(mu)
         chk("manual dsh deploy links",
-            _link_one("selftest", "dsh", "under_score",
+            _link_one("selftest", TOOL_ORDER[-1], "under_score",
                       load_manifest()["skills"]["under_score"], "under_score", False) == "linked")
         rc, out = verify_out()
         chk("verify warns for non-kebab with dsh target",
@@ -1320,7 +1320,7 @@ def cmd_selftest(args):
         del mu["skills"]["under_score"]
         save_manifest(mu)
         shutil.rmtree(wk, ignore_errors=True)
-        for _t in ("workbuddy", "dsh"):
+        for _t in (TOOL_ORDER[0], TOOL_ORDER[-1]):
             _p = os.path.join(tools[_t], "under_score")
             if os.path.lexists(_p):
                 remove_junction(_p)
